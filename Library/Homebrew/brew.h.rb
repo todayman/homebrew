@@ -399,6 +399,23 @@ def outdated_brews
   return results
 end
 
+def search_brews text
+  require "formula"
+  formulae = Formulary.names with_aliases=true
+  if text =~ /^\/(.*)\/$/
+    results = formulae.grep(Regexp.new($1))
+  else
+    search_term = Regexp.escape(text || "")
+    results = formulae.grep(/.*#{search_term}.*/)
+  end
+
+  # Filter out aliases when the full name was also found
+  aliases = Formulary.get_aliases
+  return results.select do |r|
+    aliases[r] == nil or not (results.include? aliases[r])
+  end
+end
+
 ########################################################## class PrettyListing
 class PrettyListing
   def initialize path
@@ -464,10 +481,6 @@ end
 class Cleaner
   def initialize f
     @f=f
-    
-    # correct common issues
-    share=f.prefix+'share'
-    (f.prefix+'man').mv share rescue nil
     
     [f.bin, f.sbin, f.lib].each {|d| clean_dir d if d.exist? }
     
