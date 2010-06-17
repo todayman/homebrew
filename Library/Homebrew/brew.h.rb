@@ -469,7 +469,7 @@ class Cleaner
     share=f.prefix+'share'
     (f.prefix+'man').mv share rescue nil
     
-    [f.bin, f.sbin, f.lib].each {|d| clean_dir d}
+    [f.bin, f.sbin, f.lib].each {|d| clean_dir d if d.exist? }
     
     # info pages suck
     info = f.share+'info'
