@@ -39,9 +39,7 @@ class Llvm <Formula
 
   def install
     ENV.gcc_4_2 # llvm can't compile itself
-    
-    ohai 'trying out this ohai thing'
-    
+        
     if build_clang?
       clang_dir = Pathname.new(Dir.pwd)+'tools/clang'
       if version == 'HEAD'
@@ -50,14 +48,10 @@ class Llvm <Formula
         clang_form = Clang.new
       end
       clang_form.brew do
-        puts 'Dir star is:'
-        puts Dir['*']
         clang_dir.install Dir['*']
-        puts 'put clang into the llvm build tree'
       end
     end
     
-    puts 'about to configure llvm'
     if build_debug?
       system "./configure", "--prefix=#{prefix}",
                             "--enable-debug-runtime",
