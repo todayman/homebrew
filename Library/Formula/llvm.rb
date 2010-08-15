@@ -31,10 +31,7 @@ class Llvm <Formula
   end
 
   def options
-    [
-      ['--with-clang', 'Also build & install clang'],
-      ['--debug', 'Build LLVM ( and clang perhaps ) with debugging symbols']
-    ]
+    [['--with-clang', 'Also build & install clang']]
   end
 
   def install
@@ -42,29 +39,15 @@ class Llvm <Formula
         
     if build_clang?
       clang_dir = Pathname.new(Dir.pwd)+'tools/clang'
-      if version == 'HEAD'
-        clang_form = Clang.new 'clang'
-      else
-        clang_form = Clang.new
-      end
-      clang_form.brew do
-        clang_dir.install Dir['*']
-      end
+      Clang.new.brew { clang_dir.install Dir['*'] }
     end
-    
-    if build_debug?
-      system "./configure", "--prefix=#{prefix}",
-                            "--enable-debug-runtime",
-                            "--enable-debug-symbols"
-    else
-      system "./configure", "--prefix=#{prefix}",
-                            "--enable-targets=host-only",
-                            "--enable-optimized"
-    end
-      
+
+    system "./configure", "--prefix=#{prefix}",
+                          "--enable-targets=host-only",
+                          "--enable-optimized"
     system "make" # seperate steps required, otherwise the build fails
-    system "make install" # seperate steps required, otherwise the build fails
-    
+    system "make install"
+
     if build_clang?
       Dir.chdir clang_dir do
         system "make install"
