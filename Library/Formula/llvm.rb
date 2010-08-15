@@ -62,9 +62,9 @@ class Llvm <Formula
                             "--enable-optimized"
     end
       
-    system "make"
+    system "make" # seperate steps required, otherwise the build fails
     system "make install" # seperate steps required, otherwise the build fails
-
+    
     if build_clang?
       Dir.chdir clang_dir do
         system "make install"
