@@ -2,6 +2,7 @@ require 'formula'
 
 class Sdl <Formula
   url 'http://www.libsdl.org/release/SDL-1.2.14.tar.gz'
+  head 'http://hg.libsdl.org/SDL', :using => :hg
   homepage 'http://www.libsdl.org/'
   md5 'e52086d1b508fa0b76c52ee30b55bec4'
 
@@ -15,7 +16,10 @@ class Sdl <Formula
   def install
     fails_with_llvm
     Sdl.use_homebrew_prefix %w[sdl.pc.in sdl-config.in]
-
+    
+    if ARGV.build_head?
+      system "./autogen.sh"
+    end
     system "./configure", "--prefix=#{prefix}", "--disable-nasm"
     system "make install"
 
