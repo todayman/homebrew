@@ -16,10 +16,8 @@ class Sdl <Formula
   def install
     fails_with_llvm
     Sdl.use_homebrew_prefix %w[sdl.pc.in sdl-config.in]
-    
-    if ARGV.build_head?
-      system "./autogen.sh"
-    end
+
+    system "./autogen.sh" if ARGV.build_head?
     system "./configure", "--prefix=#{prefix}", "--disable-nasm"
     system "make install"
 
