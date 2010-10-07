@@ -1,10 +1,9 @@
 require 'formula'
 
 class Flam3 <Formula
-  url 'http://flam3.googlecode.com/svn/trunk',
-    :using =>SubversionDownloadStrategy, :revision => '24'
+  url 'http://flam3.googlecode.com/files/flam3-3.0.tar.gz'
+  md5 'a264d7b120e0316e7294d40302308dd0'
   homepage 'http://code.google.com/p/flam3/'
-  version '3.0'
   
   def install
     system "./src/configure", "--disable-dependency-tracking",
