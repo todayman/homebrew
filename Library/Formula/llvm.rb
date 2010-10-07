@@ -1,7 +1,6 @@
 require 'formula'
 
 def build_clang?; ARGV.include? '--with-clang'; end
-def build_debug?; ARGV.include? '--debug'; end
 
 class Clang <Formula
   url       'http://llvm.org/releases/2.8/clang-2.8.tgz'
@@ -20,7 +19,7 @@ class Llvm <Formula
 
   def install
     ENV.gcc_4_2 # llvm can't compile itself
-        
+
     if build_clang?
       clang_dir = Pathname.new(Dir.pwd)+'tools/clang'
       Clang.new.brew { clang_dir.install Dir['*'] }
