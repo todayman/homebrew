@@ -9,7 +9,7 @@ class Hdf5 <Formula
   depends_on 'szip'
 
   def install
-    system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking"
+    system "./configure", "--prefix=#{prefix}","--enable-cxx", "--disable-debug", "--disable-dependency-tracking"
     system "make install"
   end
 end
