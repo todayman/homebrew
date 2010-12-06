@@ -13,13 +13,14 @@ class Hdf5 <Formula
   def options
     [['--enable-cxx', 'Build the C++ bindings']]
   end
-  
+
   def install
-    if enable_cxx?
-      system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking", "--enable-cxx"
-    else
-      system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking"
-    end
+    args = ["--prefix=#{prefix}",
+            "--disable-debug",
+            "--disable-dependency-tracking"]
+    args << "--enable-cxx" if enable_cxx?
+    system "./configure", *args
+
     system "make install"
   end
 end
