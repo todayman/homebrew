@@ -2,7 +2,7 @@ require 'formula'
 
 class Sdl < Formula
   url 'http://www.libsdl.org/release/SDL-1.2.14.tar.gz'
-  head 'http://hg.libsdl.org/SDL', :using => :hg
+  head 'http://hg.libsdl.org/SDL', :using => :hg, :revision => "4903"
   homepage 'http://www.libsdl.org/'
   md5 'e52086d1b508fa0b76c52ee30b55bec4'
 
