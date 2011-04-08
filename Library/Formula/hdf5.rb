@@ -18,29 +18,28 @@ class Hdf5 < Formula
 
   def options
     [
-     ['--enable-fortran', 'Compile Fortran bindings at the expense of having shared libraries'],
-     ['--enable-threadsafe', 'Trade performance and C++ or Fortran support for thread safety']
+      ['--enable-fortran', 'Compile Fortran bindings at the expense of having shared libraries'],
+      ['--enable-threadsafe', 'Trade performance and C++ or Fortran support for thread safety']
     ]
   end
 
   def install
     ENV.fortran if fortran?
-    args = ["--prefix=#{prefix}",
-            "--disable-debug",
-            "--disable-dependency-tracking",
-            '--enable-production',
-            '--with-zlib=yes',
-            '--with-szlib=yes',
-            '--enable-filters=all',
-           ]
+
+    args = [
+      "--prefix=#{prefix}",
+      '--disable-debug',
+      '--disable-dependency-tracking',
+      '--enable-production',
+      '--with-zlib=yes',
+      '--with-szlib=yes',
+      '--enable-filters=all'
+    ]
     args.concat ['--with-pthread=/usr', '--enable-threadsafe'] if threadsafe?
     args << '--enable-cxx' unless threadsafe?
     args << '--enable-fortran' if fortran? and not threadsafe?
 
     system "./configure", *args
-
-  end
-
     system "make install"
   end
 end
