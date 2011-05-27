@@ -12,7 +12,13 @@ class Wxmac < Formula
   end
 
   def install
-    system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking"
+    # Force i386
+    %w{ CFLAGS CXXFLAGS LDFLAGS OBJCFLAGS OBJCXXFLAGS }.each do |compiler_flag|
+      ENV.remove compiler_flag, "-arch x86_64"
+      ENV.append compiler_flag, "-arch i386"
+    end
+
+    system "./configure", "--prefix=#{prefix}", "--disable-debug", "--disable-dependency-tracking", "--enable-unicode"
     system "make install"
   end
 end
