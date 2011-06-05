@@ -2,9 +2,15 @@ require 'formula'
 
 class Sdl < Formula
   url 'http://www.libsdl.org/release/SDL-1.2.14.tar.gz'
-  head 'http://hg.libsdl.org/SDL', :using => :hg, :revision => "4903"
+  head 'http://www.libsdl.org/tmp/SDL-1.3.zip'
   homepage 'http://www.libsdl.org/'
-  md5 'e52086d1b508fa0b76c52ee30b55bec4'
+  def md5
+    if ARGV.build_head?
+      '7323582e03de905dc96bdee49e5fb0e7'
+    else
+      'e52086d1b508fa0b76c52ee30b55bec4'
+    end
+  end
 
   # we have to do this because most build scripts assume that all sdl modules
   # are installed to the same prefix. Consequently SDL stuff cannot be
