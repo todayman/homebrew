@@ -20,6 +20,9 @@ else
   Pathname.new("~/Library/Caches/Homebrew").expand_path
 end
 
+# Where brews installed via URL are cached
+HOMEBREW_CACHE_FORMULA = HOMEBREW_CACHE+"Formula"
+
 if not defined? HOMEBREW_BREW_FILE
   HOMEBREW_BREW_FILE = ENV['HOMEBREW_BREW_FILE'] || `which brew`.chomp
 end
@@ -51,4 +54,4 @@ module Homebrew extend self
 end
 
 FORMULA_META_FILES = %w[README README.md ChangeLog COPYING LICENSE LICENCE COPYRIGHT AUTHORS]
-PLEASE_REPORT_BUG = "#{Tty.white}Please report this bug: #{Tty.em}https://github.com/mxcl/homebrew/wiki/new-issue#{Tty.reset}"
+PLEASE_REPORT_BUG = "#{Tty.white}Please report this bug: #{Tty.em}https://github.com/mxcl/homebrew/wiki/Checklist-before-filing-a-new-issue#{Tty.reset}"
