@@ -246,6 +246,14 @@ module MacOS extend self
     Pathname.new("/usr/bin/cc").realpath.basename.to_s
   end
 
+  def default_compiler
+    case default_cc
+      when /^gcc/ then :gcc
+      when /^llvm/ then :llvm
+      when "clang" then :clang
+    end
+  end
+
   def gcc_42_build_version
     `/usr/bin/gcc-4.2 -v 2>&1` =~ /build (\d{4,})/
     if $1
@@ -289,19 +297,39 @@ module MacOS extend self
 
   def xcode_version
     @xcode_version ||= begin
+      raise unless system "/usr/bin/which -s xcodebuild"
       `xcodebuild -version 2>&1` =~ /Xcode (\d(\.\d)*)/
       $1
+    rescue
+      # for people who don't have xcodebuild installed due to using
+      # some variety of minimal installer, let's try and guess their
+      # Xcode version
+      case llvm_build_version.to_i
+      when 0..2063 then "3.1.0"
+      when 2064..2065 then "3.1.4"
+      when 2366..2325
+        # we have no data for this range so we are guessing
+        "3.2.0"
+      when 2326
+        # also applies to "3.2.3"
+        "3.2.4"
+      when 2327..2333 then "3.2.5"
+      when 2335
+        # this build number applies to 3.2.6, 4.0 and 4.1
+        # https://github.com/mxcl/homebrew/wiki/Xcode
+        "4.0"
+      else
+        "4.2"
+      end
     end
   end
 
   def llvm_build_version
-    unless xcode_prefix.to_s.empty?
-      llvm_gcc_path = xcode_prefix/"usr/bin/llvm-gcc"
-      # for Xcode 3 on OS X 10.5 this will not exist
-      if llvm_gcc_path.file?
-        `#{llvm_gcc_path} -v 2>&1` =~ /LLVM build (\d{4,})/
-        $1.to_i # if nil this raises and then you fix the regex
-      end
+    # for Xcode 3 on OS X 10.5 this will not exist
+    # NOTE may not be true anymore but we can't test
+    if File.exist? "/usr/bin/llvm-gcc"
+      `/usr/bin/llvm-gcc -v 2>&1` =~ /LLVM build (\d{4,})/
+      $1.to_i
     end
   end
 
